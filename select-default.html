@@ -52,9 +52,15 @@
   <option>George</option>
 </select>
 
+<!--
+<input id='file1' name='file' class='input' size='-1' type='file' />
+<button class="hidden" id='RemoveFile' value='Remove' onclick = 'removeAttachment("fileUpload")'>Remove</button>
+ -->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="js/customSelectObjPattern.js" type="text/javascript"></script>
 <script src="js/select2.min.js" type="text/javascript"></script>
+<script src="js/filestyle.js" type="text/javascript"></script>
 <script type="text/javascript">
  // $('#userID').data('customSelect').foo_public_method();
  $('#country').customSelect();
@@ -62,12 +68,19 @@
  $('#optgr').customSelect();
   // $('#optgr').select2()
  $('#multiple').customSelect({
-    callback: function(){console.log('test')}
+    //callback: function(){console.log('test')}
  });
  //window.setTimeout($('#userID').customSelect(), 50);
  $('#userID').customSelect({})
  // $('#optgr').customSelect()
  //$('#country').data('customSelect');
+
+  $("input[type=file]").filestyle({
+     image: "https://system.na1.netsuite.com/core/media/media.nl?id=5689&c=TSTDRV1028330&h=bb3edf1d22abe95fa646",
+     imageheight : 35,
+     imagewidth : 80,
+     width : 335
+  });
 
 </script>
 

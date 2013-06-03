@@ -79,11 +79,11 @@
     CustomSelect.prototype = {
 
         getRealWidth:  function($e){
-            return $e.width() + parseInt($e.css("padding-left"), 10) + parseInt($e.css("padding-right"), 10);
+            return $e.width() + parseInt($e.css("padding-left") + $e.css("padding-right") + $e.css("border-right") + $e.css("border-left"), 10);
         },
 
         getRealHeight: function ($e) {
-            return $e.height() + parseInt($e.css("padding-top"), 10) + parseInt($e.css("padding-bottom"), 10);
+            return $e.height() + parseInt($e.css("padding-top") + $e.css("padding-bottom") + $e.css("border-top") + $e.css("border-bottom"), 10);
         },
 
         // the actual constructor of the DOM
@@ -170,12 +170,13 @@
             //hides all the visible dropdowns in case they are not the active one
             $('.drop-container').not(self.$element.next().find('.drop-container')).hide();
             if(self.$dropDownContainer.is(':visible')) {
-                self.$dropDownContainer.slideUp(self.options.slideTime);
-                self.$selectBox.removeClass('expanded');
+                self.$dropDownContainer.slideUp(self.options.slideTime, function(){ self.$customSelectContainer.removeClass('focused'); });
+                self.$selectBox.removeClass('expanded, active');
             }
             if(self.$dropDownContainer.is(':hidden')) {
                 self.$dropDownContainer.slideDown(self.options.slideTime);
-                self.$selectBox.addClass('expanded');
+                self.$customSelectContainer.addClass('focused');
+                self.$selectBox.addClass('expanded, active');
             }
         },
 
@@ -206,7 +207,8 @@
                 });
             }
             //focus blur event - for UI purposes
-            self.$customSelectContainer.off('focus.default3 blur.default4').on('focus.default3 blur.default4', function(){ $(this).toggleClass('focused'); });
+            self.$customSelectContainer.off('focus.default3').on('focus.default3', function(){ $(this).addClass('focused'); });
+            self.$customSelectContainer.on('blur.default4', function(){ $(this).removeClass('focused'); });
 
             //close dropdown on text outside the select
             $('html').off('click.default5').on('click.default5', function(evt){
@@ -241,7 +243,6 @@
                    $(this).addClass('selected').siblings().removeClass('selected');
                 }
 
-
                 self.keepSelectedOption(selectedText);
                 self.hideDropdown();
             });
@@ -267,13 +268,8 @@
 
         destroy: function(){
             var self = this;
+            self.$dropDownContainer.find('*').off('click, change');
             self.$customSelectContainer.remove();
-            self.$customSelectContainer.off('click');
-            self.$customSelectContainer.find('*').off('click');
-            self.$selectBox.off('click');
-            self.$selectBox.find('*'.off('click');
-            self.$dropDownContainer.off('click');
-            self.$dropDownContainer.find('*').off('click');
         },
 
         init: function() {
@@ -281,7 +277,7 @@
             self.selectBoxConstructor();
             self.selectBoxBindEvents();
             self.callBack();
-            self.destroy();
+            //self.destroy();
         }
 
     };
@@ -322,7 +318,7 @@
             // plugin, so that users may customize those particular events without
             // changing the plugin's code
             callback        : function() {},
-            destroy         : function() {}
+            //destroy         : function() {}
     };
 
 })( jQuery, window, document );
